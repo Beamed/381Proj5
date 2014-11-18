@@ -21,7 +21,7 @@ const int default_precision_c = 2;
 Agent::Agent(const std::string& name_, Point location_):
 Sim_object(name_), moving_obj(location_, default_speed_c),
 health(default_health_c), speed(default_speed_c),
-state(Agent_state_e::ALIVE)
+alive(true)
 {
     cout << "Agent " << name_ << " constructed" << endl;
 }
@@ -70,9 +70,11 @@ void Agent::lose_health(int attack_strength)
 {
     health -= attack_strength;
     if(health <= 0) {
-        state = Agent_state_e::DYING;
+        alive = false;
         moving_obj.stop_moving();
+        Model::get_instance().notify_gone(get_name());
         cout << get_name() << ": Arrggh!" << endl;
+        Model::get_instance().remove_agent(shared_from_this());
         return;
     }
     cout << get_name() << ": Ouch!" << endl;
@@ -81,20 +83,11 @@ void Agent::lose_health(int attack_strength)
 //If dying, tells Model that it's gone.
 void Agent::update()
 {
-    switch(state) {
-        case Agent_state_e::ALIVE:
-            update_Movement();
-            break;
-        case Agent_state_e::DYING:
-            Model::get_instance().notify_gone(get_name());
-            state = Agent_state_e::DEAD;
-            break;
-        case Agent_state_e::DEAD:
-            state = Agent_state_e::DISAPPEARING;
-            break;
-        case Agent_state_e::DISAPPEARING:
-            //do nothing
-            break;
+    if(alive) {
+        update_Movement();
+    }
+    else {
+        
     }
 }
 //Calls update location; if there, announces such.
@@ -130,23 +123,8 @@ void Agent::describe() const
         }
         return;//no need to check dying state if is alive
     }
-    switch(state) {
-        case Agent_state_e::DYING:
-            cout << "   Is dying" << endl;
-            break;
-        case Agent_state_e::DEAD:
-            cout << "   Is dead" << endl;
-            break;
-        case Agent_state_e::DISAPPEARING:
-            cout << "   Is disappearing" << endl;
-            break;
-        default:
-            assert(state == Agent_state_e::ALIVE
-                   || state == Agent_state_e::DYING
-                   || state == Agent_state_e::DEAD
-                   || state == Agent_state_e::DISAPPEARING);
-            break;
-    }
+    else
+        cout << "   Is dead" << endl;
 }
 //Tells Model about the current location of the Agent.
 void Agent::broadcast_current_state()

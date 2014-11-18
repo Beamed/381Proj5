@@ -79,7 +79,9 @@ public:
 	void notify_location(const std::string& name, Point location);
 	// notify the views that an object is now gone
 	void notify_gone(const std::string& name);
-	
+    //removes agent from all containers.
+    void remove_agent(std::shared_ptr<Agent> agent);
+    
 private:
     //function object to ensure objects are stored in correct order
     struct Less_than_obj_ptr {
@@ -99,8 +101,7 @@ private:
     
     //inserts an agent into the relevant containers
     void insert_agent(std::shared_ptr<Agent> agent);
-    //removes agent from all containers and deletes them.
-    void remove_agent(std::shared_ptr<Agent> agent);
+
 
 	// disallow copy/move construction or assignment
 	Model(const Model&) = delete;

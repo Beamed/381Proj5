@@ -22,11 +22,7 @@ public:
     virtual ~Agent() override;
     // return true if this agent is Alive or Disappearing
     bool is_alive() const {
-        return state == Agent_state_e::ALIVE;
-    }
-    
-    bool is_disappearing() const {
-        return state == Agent_state_e::DISAPPEARING;
+        return alive;
     }
     
     // return this Agent's location
@@ -79,13 +75,7 @@ private:
     double speed;
     Moving_object moving_obj;
     
-    enum class Agent_state_e {
-        ALIVE,
-        DYING,
-        DEAD,
-        DISAPPEARING
-    };
-    Agent_state_e state;
+    bool alive;
     void update_Movement();
 };
 #endif

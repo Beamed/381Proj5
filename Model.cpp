@@ -116,21 +116,12 @@ void Model::update()
 {
     time++;
     for_each(objects.begin(), objects.end(), mem_fn(&Sim_object::update));
-    list<shared_ptr<Agent>> disappearing_agents;
-    for(auto agent_iter = agents.begin(); agent_iter != agents.end();
-        ++agent_iter) {
-        if(agent_iter->second->is_disappearing())
-            disappearing_agents.push_back(agent_iter->second);
-    }
-    for_each(disappearing_agents.begin(), disappearing_agents.end(),
-             bind(&Model::remove_agent, this, _1));
 }
 
 //Removes the given agent from each container and deletes them.
 void Model::remove_agent(shared_ptr<Agent> agent)
 {
-    string name = agent->get_name();
-    agents.erase(name);
+    agents.erase(agent->get_name());
     objects.erase(agent);
 }
 

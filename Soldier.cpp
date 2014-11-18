@@ -2,6 +2,7 @@
 #include "Utility.h"
 #include "Geometry.h"
 #include <iostream>//cout, endl
+#include <cassert>
 
 const int default_strength_c = 2;
 const double default_range_c = 2.0;
@@ -29,6 +30,7 @@ Soldier::~Soldier()
 //Throws an error if not
 void Soldier::start_attacking(weak_ptr<Agent> target_ptr)
 {
+    assert(!target_ptr.expired());
     shared_ptr<Agent> new_target = target_ptr.lock();
     if(new_target == shared_from_this()) {
         //check if agents are the same
@@ -62,14 +64,14 @@ bool Soldier::in_range(shared_ptr<Agent> target_ptr) const
 void Soldier::update()
 {
     Agent::update();
-    if(!is_alive() || !is_attacking || target.expired()) {
+    if(!is_alive() || !is_attacking) {
         return;
     }//do nothing further if dead or not attacking
     //if this far, means alive & attacking
     shared_ptr<Agent> cur_target = target.lock();
-    if(!cur_target->is_alive()) {
+    if(!cur_target || !cur_target->is_alive()) {
         cout << get_name() << ": Target is dead" << endl;
-        is_attacking = false;
+        stop_attacking();
         return;
     }
     if(!in_range(cur_target)) {
@@ -120,8 +122,12 @@ void Soldier::describe() const
 {
     cout << "Soldier ";
     Agent::describe();
-    if(is_attacking)
-        cout << "   Attacking " << target.lock()->get_name() << endl;
+    if(is_attacking){
+        if(target.expired() || !target.lock()->is_alive())
+            cout << "   Attacking dead target" << endl;
+        else
+           cout << "   Attacking " << target.lock()->get_name() << endl;
+    }
     else
         cout << "   Not attacking" << endl;
 }
