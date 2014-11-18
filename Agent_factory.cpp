@@ -5,6 +5,7 @@
 #include "Utility.h"
 
 using std::string;
+using std::shared_ptr;
 
 const char* const soldier_name_c = "Soldier";
 const char* const peasant_name_c = "Peasant";
@@ -13,14 +14,15 @@ const char* const peasant_name_c = "Peasant";
 //Creates and returns a pointer to the specified Agent type
 //Throws an error if the type is unrecognized.
 //Is not responsible for the dynamically allocated memory. 
-Agent* create_agent(const string& name, const string& type,
-                    Point location)
+shared_ptr<Agent> create_agent(
+                               const string& name,const string& type,
+                               Point location)
 {
     if(type == soldier_name_c) {
-        return new Soldier{name, location};
+        return shared_ptr<Agent>{new Soldier{name, location}};
     }
     else if(type == peasant_name_c) {
-        return new Peasant{name, location};
+        return shared_ptr<Agent>{new Peasant{name, location}};
     }
     else {
         throw Error{"Trying to create agent of unknown type!"};

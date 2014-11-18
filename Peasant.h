@@ -32,7 +32,8 @@ public:
 
 	// starts the working process
 	// Throws an exception if the source is the same as the destination.
-	void start_working(Structure * source_, Structure * destination_) override;
+	void start_working(std::shared_ptr<Structure> source_,
+                       std::shared_ptr<Structure> destination_) override;
 
 	// output information about the current state
 	void describe() const override;
@@ -47,8 +48,8 @@ private:
     };
     Peasant_state_e working_state;
     double food;
-    Structure* food_src;
-    Structure* food_dest;
+    std::shared_ptr<Structure> food_src;
+    std::shared_ptr<Structure> food_dest;
     //Checks if current state is working;
     //if it is, outputs "I'm stopping work",
     //and calls end_work

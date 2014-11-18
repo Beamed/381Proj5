@@ -7,6 +7,7 @@
  */
 #ifndef AGENT_H
 #define AGENT_H
+#include <memory>
 #include "Sim_object.h"
 #include "Moving_object.h"
 
@@ -14,7 +15,8 @@
 class Structure;
 
 
-class Agent: public Sim_object {
+class Agent: public Sim_object,
+             public std::enable_shared_from_this<Agent> {
 public:
     
     virtual ~Agent() override;
@@ -43,7 +45,8 @@ public:
     // The attacking Agent identifies itself with its this pointer.
     // A derived class can override this function.
     // The function lose_health is called to handle the effect of the attack.
-    virtual void take_hit(int attack_strength, Agent *attacker_ptr);
+    virtual void take_hit(int attack_strength,
+                          std::weak_ptr<Agent> attacker_ptr);
     
     // update the moving state and Agent state of this object.
     void update() override;
@@ -56,10 +59,11 @@ public:
     
     /* Fat Interface for derived classes */
     // Throws exception that an Agent cannot work.
-    virtual void start_working(Structure *, Structure *);
+    virtual void start_working(std::shared_ptr<Structure>,
+                               std::shared_ptr<Structure>);
     
     // Throws exception that an Agent cannot attack.
-    virtual void start_attacking(Agent *);
+    virtual void start_attacking(std::weak_ptr<Agent>);
     
 protected:
     

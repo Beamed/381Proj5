@@ -10,6 +10,7 @@ const double max_food_c = 35.0;
 using std::string;
 using std::cout;
 using std::endl;
+using std::shared_ptr;
 
 //constructs & announces construction of a Peasant
 Peasant::Peasant(const string& name_, Point location_) :
@@ -41,7 +42,7 @@ void Peasant::update()
         return;
     }
     if(working_state == Peasant_state_e::COLLECTING) {
-        double received_amount = food_src->withdraw(max_food_c - food);
+        double received_amount=food_src->withdraw(max_food_c - food);
         food += received_amount;
         if(received_amount > 0.0) {//if it is positive
             cout << get_name() << ": Collected " <<
@@ -101,7 +102,8 @@ void Peasant::stop()
 //If the source and dest are bad, and also begins depositing
 //or collecting if it is already at one of the locations with/without
 //food.
-void Peasant::start_working(Structure *source_, Structure *destination_)
+void Peasant::start_working(shared_ptr<Structure> source_,
+                            shared_ptr<Structure> destination_)
 {
     Agent::stop();
     end_work();

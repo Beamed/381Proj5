@@ -17,6 +17,7 @@ using std::mem_fn;
 using std::map;
 using std::bind;
 using std::list;
+using std::shared_ptr;
 using namespace std::placeholders;
 
 const int default_starting_time_c = 0;
@@ -43,27 +44,27 @@ Model& Model::get_instance()
 }
 
 //Inserts structure and has it broadcast its state
-void Model::add_structure(Structure * structure)
+void Model::add_structure(shared_ptr<Structure> structure)
 {
     insert_structure(structure);
     structure->broadcast_current_state();
 }
 
 //Inserts the agent into containers and has it broadcast its state
-void Model::add_agent(Agent * agent)
+void Model::add_agent(shared_ptr<Agent> agent)
 {
     insert_agent(agent);
     agent->broadcast_current_state();
 }
 //Adds the structure to the map of structures; assumes none with same name
-void Model::insert_structure(Structure* structure)
+void Model::insert_structure(shared_ptr<Structure> structure)
 {
     objects.insert(structure);
     structures.insert(make_pair(structure->get_name(), structure));
 }
 
 //Adds the agent to the map of agents; assumes none with same name
-void Model::insert_agent(Agent* agent)
+void Model::insert_agent(shared_ptr<Agent> agent)
 {
     objects.insert(agent);
     agents.insert(make_pair(agent->get_name(), agent));
@@ -71,7 +72,7 @@ void Model::insert_agent(Agent* agent)
 
 //Returns the structure pointer with the requested name.
 //If not found, will throw Error("Structure not found!")
-Structure* Model::get_structure_ptr(const string& name) const
+shared_ptr<Structure> Model::get_structure_ptr(const string& name) const
 {
     auto struct_ptr = structures.find(name);
     if(struct_ptr == structures.end()) {
@@ -80,13 +81,6 @@ Structure* Model::get_structure_ptr(const string& name) const
     return struct_ptr->second;
 }
 
-//Destroys all the objects
-Model::~Model()
-{//delete each object pointer, let the containers fall out of scope:
-    for_each(objects.begin(), objects.end(), [] (Sim_object* p) {
-        delete p;
-    });
-}
 //Returns true if any object has the name provided
 bool Model::is_name_in_use(const string &name) const
 {//why redo code? :
@@ -103,7 +97,7 @@ bool Model::is_agent_present(const string &name) const
     return agents.find(name) != agents.end();
 }
 //Returns an agent with the given name, throws an error if not found.
-Agent* Model::get_agent_ptr(const string &name) const
+shared_ptr<Agent> Model::get_agent_ptr(const string &name) const
 {
     auto agent_iter = agents.find(name);
     if(agent_iter == agents.end()) {
@@ -122,7 +116,7 @@ void Model::update()
 {
     time++;
     for_each(objects.begin(), objects.end(), mem_fn(&Sim_object::update));
-    list<Agent*> disappearing_agents;
+    list<shared_ptr<Agent>> disappearing_agents;
     for(auto agent_iter = agents.begin(); agent_iter != agents.end();
         ++agent_iter) {
         if(agent_iter->second->is_disappearing())
@@ -133,23 +127,22 @@ void Model::update()
 }
 
 //Removes the given agent from each container and deletes them.
-void Model::remove_agent(Agent* agent)
+void Model::remove_agent(shared_ptr<Agent> agent)
 {
     string name = agent->get_name();
     agents.erase(name);
     objects.erase(agent);
-    delete agent;
 }
 
 //compares the two objects lexicographically by calling get_name
-bool Model::Less_than_obj_ptr::operator()(Sim_object *p1,
-                                          Sim_object *p2)
+bool Model::Less_than_obj_ptr::operator()(shared_ptr<Sim_object> p1,
+                                          shared_ptr<Sim_object> p2)
 {
     return p1->get_name() < p2->get_name();
 }
 
 //Inserts the view into the list of views
-void Model::attach(View *view)
+void Model::attach(shared_ptr<View> view)
 {
     views.push_back(view);
     for_each(objects.begin(), objects.end(),
@@ -157,7 +150,7 @@ void Model::attach(View *view)
     //this way we ensure the view is "up to date"
 }
 //Removes the view from the list of views.
-void Model::detach(View *view)
+void Model::detach(shared_ptr<View> view)
 {
     views.remove(view);
 }

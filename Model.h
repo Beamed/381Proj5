@@ -21,6 +21,7 @@ Notice how only the Standard Library headers need to be included - reduced coupl
 #include <map>
 #include <set>
 #include <list>
+#include <memory>
 
 class Model;//forward declare for ptrs:
 class Agent;
@@ -33,9 +34,6 @@ class Model {
 public:
 	// create the initial objects
 	Model();
-	
-	// destroy all objects
-	~Model();
     
     //Returns the current instance of Model.
     //If none exists, implicitly creates one.
@@ -52,16 +50,18 @@ public:
 	// is there a structure with this name?
 	bool is_structure_present(const std::string& name) const;
 	// add a new structure; assumes none with the same name
-	void add_structure(Structure* structure);
+	void add_structure(std::shared_ptr<Structure> structure);
 	// will throw Error("Structure not found!") if no structure of that name
-	Structure* get_structure_ptr(const std::string& name) const;
+	std::shared_ptr<Structure>
+        get_structure_ptr(const std::string& name) const;
 
 	// is there an agent with this name?
 	bool is_agent_present(const std::string& name) const;
 	// add a new agent; assumes none with the same name
-	void add_agent(Agent* agent);
+	void add_agent(std::shared_ptr<Agent> agent);
 	// will throw Error("Agent not found!") if no agent of that name
-	Agent* get_agent_ptr(const std::string& name) const;
+	std::shared_ptr<Agent>
+        get_agent_ptr(const std::string& name) const;
 	
 	// tell all objects to describe themselves to the console
 	void describe() const;
@@ -71,10 +71,10 @@ public:
 	/* View services */
 	// Attaching a View adds it to the container and causes it to be updated
     // with all current objects'location (or other state information.
-	void attach(View* view);
+	void attach(std::shared_ptr<View> view);
 	// Detach the View by discarding the supplied pointer from the container of Views
     // - no updates sent to it thereafter.
-	void detach(View* view);
+	void detach(std::shared_ptr<View> view);
     // notify the views about an object's location
 	void notify_location(const std::string& name, Point location);
 	// notify the views that an object is now gone
@@ -83,22 +83,24 @@ public:
 private:
     //function object to ensure objects are stored in correct order
     struct Less_than_obj_ptr {
-        bool operator() (Sim_object* p1, Sim_object* p2);
+        bool operator()
+            (std::shared_ptr<Sim_object> p1,
+             std::shared_ptr<Sim_object> p2);
     };
     
-    std::map<std::string, Agent*> agents;
-    std::map<std::string, Structure*> structures;
-    std::set<Sim_object*, Less_than_obj_ptr> objects;
+    std::map<std::string, std::shared_ptr<Agent>> agents;
+    std::map<std::string, std::shared_ptr<Structure>> structures;
+    std::set<std::shared_ptr<Sim_object>, Less_than_obj_ptr> objects;
     int time;
-    std::list<View*> views;
+    std::list<std::shared_ptr<View>> views;
     
     //inserts a structure into the relevant containers
-    void insert_structure(Structure* structure);
+    void insert_structure(std::shared_ptr<Structure> structure);
     
     //inserts an agent into the relevant containers
-    void insert_agent(Agent* agent);
+    void insert_agent(std::shared_ptr<Agent> agent);
     //removes agent from all containers and deletes them.
-    void remove_agent(Agent* agent);
+    void remove_agent(std::shared_ptr<Agent> agent);
 
 	// disallow copy/move construction or assignment
 	Model(const Model&) = delete;

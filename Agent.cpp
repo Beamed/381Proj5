@@ -9,6 +9,8 @@ using std::cout;
 using std::endl;
 using std::string;
 using std::ios;
+using std::shared_ptr;
+using std::weak_ptr;
 
 const int default_health_c = 5;
 const double default_speed_c = 5.;
@@ -57,7 +59,8 @@ void Agent::stop()
     }
 }
 //Decrements the health lost by the attack by calling lose_health
-void Agent::take_hit(int attack_strength, Agent *attacker_ptr)
+void Agent::take_hit(int attack_strength,
+                     weak_ptr<Agent> attacker_ptr)
 {
     lose_health(attack_strength);
 }
@@ -151,12 +154,13 @@ void Agent::broadcast_current_state()
     Model::get_instance().notify_location(get_name(), get_location());
 }
 //Throws error that it can't work
-void Agent::start_working(Structure*, Structure*)
+void Agent::start_working(shared_ptr<Structure>,
+                          shared_ptr<Structure>)
 {
     throw Error{get_name() + ": Sorry, I can't work!"};
 }
 //Throws error that it can't attack
-void Agent::start_attacking(Agent*)
+void Agent::start_attacking(weak_ptr<Agent>)
 {
     throw Error{get_name() +  + ": Sorry, I can't attack!"};
 }
