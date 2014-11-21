@@ -37,6 +37,8 @@ public:
 
 	// output information about the current state
 	void describe() const override;
+    //notify Model about the amount carried 
+    void broadcast_current_state() override;
     
 private:
     enum class Peasant_state_e {

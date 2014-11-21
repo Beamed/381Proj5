@@ -122,6 +122,9 @@ class Local_view: public Tile_view
     std::string get_name() override {
         return followed_object;
     }
+    //Outputs information about what is being drawn
+    //before drawing
+    void draw() override;
 private:
     //returns the point which should be an origin to center
     //at a given location.

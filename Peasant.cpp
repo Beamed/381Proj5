@@ -1,6 +1,7 @@
 #include "Peasant.h"
 #include "Structure.h"
 #include "Utility.h"
+#include "Model.h"
 #include <iostream>//cout, endl
 #include <cassert>//assert
 
@@ -167,4 +168,11 @@ void Peasant::describe() const
             break;
     }
     
+}
+
+//Notify Model about the amount carried as well as health
+void Peasant::broadcast_current_state()
+{
+    Agent::broadcast_current_state();
+    Model::get_instance().notify_amount(get_name(), food);
 }

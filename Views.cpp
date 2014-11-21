@@ -9,11 +9,11 @@ using std::string;
 using std::cout;
 using std::endl;
 using std::vector;
-using std::ostream_iterator;
 using std::ios;
 using std::setw;
 using std::list;
 using std::map;
+using std::ostream_iterator;
 
 const int min_map_size_c = 7;
 const int max_map_size_c = 30;
@@ -183,7 +183,7 @@ list<string> Tile_view::get_outside_objects()
     for(auto obj_pair_iter = objects.begin(); obj_pair_iter != objects.end();
         obj_pair_iter ++ ) {
         int garbagex, garbagey;//no need for the returned values here
-        if(get_subscripts(garbagex, garbagey, obj_pair_iter->second)) {
+        if(!get_subscripts(garbagex, garbagey, obj_pair_iter->second)) {
             outside_objects.push_back(obj_pair_iter->first);
         }
     }
@@ -196,6 +196,12 @@ Point Tile_view::get_object_location(const string& name)
     return objects.find(name)->second;
 }
 
+
+//initializes map view and underlying tile_view with default settings
+Map_view::Map_view() :
+Tile_view()
+{
+}
 //restores parameters to the default values
 void Map_view::set_defaults()
 {
@@ -203,21 +209,21 @@ void Map_view::set_defaults()
     set_scale(default_scale_c);
     set_origin(Point{default_origin_x_c, default_origin_y_c});
 }
-//initializes map view and underlying tile_view with default settings
-Map_view::Map_view() :
-Tile_view()
-{
-}
-
 //Outputs current information about the map, any users who are currently
 //outside the map, and then the map.
 void Map_view::draw()
 {
     describe();
     list<string> outside_objs = get_outside_objects();
-    ostream_iterator<string> out_iter(cout, ", ");
-    copy(outside_objs.begin(), outside_objs.end(), out_iter);
-    cout << " outside the map" << endl;
+    if(!outside_objs.empty()) {
+        for(const string& obj : outside_objs) {
+            cout << obj;
+            if(obj != outside_objs.back()) {
+                cout << ", ";
+            }
+        }
+        cout << " outside the map" << endl;
+    }
     Tile_view::draw();
 }
 //Constructs a tile view with the given "set" values of a local view's
@@ -245,6 +251,12 @@ void Local_view::update_location(const string& name, Point location)
     if(name == followed_object) {
         Tile_view::set_origin(get_Origin_Value(get_object_location(name)));
     }
+}
+
+void Local_view::draw()
+{
+    cout << "Local view for: " << followed_object << endl;
+    Tile_view::draw();
 }
 //Constructs an instance of this with the given label of output
 Info_view::Info_view(const std::string& name_of_data)  :
