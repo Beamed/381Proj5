@@ -24,7 +24,7 @@ public:
     virtual void describe() const;
     
     // ask model to notify views of current state
-    void broadcast_current_state();
+    virtual void broadcast_current_state();
     
     // fat interface for derived types
     virtual double withdraw(double amount_to_get);

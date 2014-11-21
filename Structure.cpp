@@ -29,11 +29,11 @@ void Structure::describe() const
 void Structure::broadcast_current_state()
 {
     Model::get_instance().notify_location(get_name(), get_location());
+    
 }
 //Returns a default amt
 double Structure::withdraw(double amount_to_get)
 {
     return default_amount_c;
 }
-
 

@@ -18,6 +18,7 @@ using std::map;
 using std::bind;
 using std::list;
 using std::shared_ptr;
+using std::any_of;
 using namespace std::placeholders;
 
 const int default_starting_time_c = 0;
@@ -152,9 +153,49 @@ void Model::notify_location(const string &name, Point location)
     for_each(views.begin(), views.end(),
              bind(&View::update_location, _1, name, location));
 }
-//calls each view's update_remove function to remove the named obj
-void Model::notify_gone(const std::string &name)
+//Calls each view's update_amount function to update the amount of named obj
+void Model::notify_amount(const string &name, double amount)
 {
-    if(views.empty()) return;//do nothing if no views to update
+    if(views.empty()) return;
+    for_each(views.begin(), views.end(),
+             bind(&View::update_amount, _1, name, amount));
+}
+//Calls each view's update_health function to update the health of named obj
+void Model::notify_health(const string &name, double health)
+{
+    if(views.empty()) return;
+    for_each(views.begin(), views.end(),
+             bind(&View::update_health, _1, name, health));
+}
+//calls each view's update_remove function to remove the named obj
+void Model::notify_gone(const string &name)
+{
+    if(views.empty()) return;
     for_each(views.begin(), views.end(), bind(&View::update_remove, _1, name));
+}
+//calls each view's draw() function.
+void Model::draw()
+{
+    if(views.empty()) return;
+    for_each(views.begin(), views.end(), mem_fn(&View::draw));
+}
+
+//returns true if a view of that name exists, false otherwise
+bool Model::has_view(const string &name)
+{
+    return any_of(views.begin(), views.end(),[&name](shared_ptr<View> view) {
+        if(view->get_name() == name) return true;
+        return false;
+    });
+}
+//Returns a shared_ptr with the given name. If no view found, returns
+//a nullptr.
+shared_ptr<View> Model::get_view(const string& name)
+{
+    for(auto list_iter= views.begin();list_iter != views.end();list_iter++) {
+        if((*list_iter)->get_name() == name){
+            return *list_iter;
+        }
+    }
+    return nullptr;//else we haven't found one!
 }

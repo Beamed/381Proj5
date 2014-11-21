@@ -1,4 +1,5 @@
 #include "Farm.h"
+#include "Model.h"
 #include <iostream>//cout, endl
 
 const double default_starting_food_c = 50.0;
@@ -46,4 +47,10 @@ void Farm::describe() const
     cout << "Farm ";
     Structure::describe();
     cout << "   Food available: " << cur_amount << endl;
+}
+//Broadcasts additional information about the current amount stored
+void Farm::broadcast_current_state()
+{
+    Structure::broadcast_current_state();
+    Model::get_instance().notify_amount(get_name(), cur_amount);
 }

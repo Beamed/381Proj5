@@ -77,10 +77,22 @@ public:
 	void detach(std::shared_ptr<View> view);
     // notify the views about an object's location
 	void notify_location(const std::string& name, Point location);
+    //notify the views about an object's amount
+    void notify_amount(const std::string& name, double amount);
+    //Notify the views about an object's amount of health
+    void notify_health(const std::string&name, double health);
 	// notify the views that an object is now gone
 	void notify_gone(const std::string& name);
     //removes agent from all containers.
     void remove_agent(std::shared_ptr<Agent> agent);
+    //returns true if a view of that name exists, false otherwise
+    bool has_view(const std::string& name);
+    //returns the view with the name requested, or nullptr if none
+    //exists
+    std::shared_ptr<View> get_view(const std::string& name);
+    
+    //calls each view's Draw function
+    void draw();
     
 private:
     //function object to ensure objects are stored in correct order

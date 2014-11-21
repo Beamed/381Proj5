@@ -17,16 +17,28 @@ public:
 	void run();
 	
 private:
-    //reads an integer and has view's size changed based on it
-    void resize(std::shared_ptr<View> view);
+    //opens a view of the given type, ie. map if "map", health if "health"
+    void open();
+    //has map_view's default settings set, if open
+    void set_default_map();
+    //reads an integer and has map view's size changed based on it
+    void resize();
 
-    //reads a double and has the current view zoom changed
+    //reads a double and has the current map_view zoom changed
     //based on it
-    void zoom(std::shared_ptr<View> view);
+    void zoom();
     
-    //reads in two doubles and notifies view to change the origin
-    void pan(std::shared_ptr<View> view);
-    
+    //reads in two doubles and notifies map_view to change the origin
+    void pan();
+    //orders all views to draw themselves
+    void draw();
+    //closes the view read in from stdin. If no view exists, throws error
+    void close();
+    //forces every object in existence to describe itself by contacting
+    //model
+    void describe();
+    //forces every object to update its current existence - go ahead 1 turn
+    void update();
     //reads in a name, type and location for the new structure,
     //and passes it to model, verifying input in the process.
     //If input is incorrect, throws an Error.
@@ -62,6 +74,7 @@ private:
     //performing all necessary error-checking while doing so.
     //Returns a struct with the data it read
     New_object create_object();
+    
 };
 
 #endif

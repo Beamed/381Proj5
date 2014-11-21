@@ -28,6 +28,9 @@ public:
 
 	// output information about the current state
 	void describe() const override;
+    //broadcasts additional information on the current amount of food
+    //it has available
+    void broadcast_current_state() override;
 private:
     double food;
 };

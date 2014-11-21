@@ -79,15 +79,11 @@ void Agent::lose_health(int attack_strength)
     }
     cout << get_name() << ": Ouch!" << endl;
 }
-//Updates the state of the agent based on its movement or state of dying.
-//If dying, tells Model that it's gone.
+//Has the agent update its movement if alive
 void Agent::update()
 {
     if(alive) {
         update_Movement();
-    }
-    else {
-        
     }
 }
 //Calls update location; if there, announces such.
@@ -130,6 +126,7 @@ void Agent::describe() const
 void Agent::broadcast_current_state()
 {
     Model::get_instance().notify_location(get_name(), get_location());
+    Model::get_instance().notify_health(get_name(), health);
 }
 //Throws error that it can't work
 void Agent::start_working(shared_ptr<Structure>,

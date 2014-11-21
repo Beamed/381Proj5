@@ -1,4 +1,5 @@
 #include "Town_Hall.h"
+#include "Model.h"
 #include <iostream>//cout , endl
 
 const double default_food_c = 0.0;
@@ -48,4 +49,10 @@ void Town_Hall::describe() const
     cout << "Town_Hall ";
     Structure::describe();
     cout << "   Contains " << food << endl;
+}
+//broadcasts additional information on current amount in town_hall
+void Town_Hall::broadcast_current_state()
+{
+    Structure::broadcast_current_state();
+    Model::get_instance().notify_amount(get_name(), food);
 }

@@ -1,6 +1,7 @@
 #include "Controller.h"
 #include "Model.h"
 #include "View.h"
+#include "Views.h"
 #include "Agent_factory.h"
 #include "Structure_factory.h"
 #include "Utility.h"
@@ -24,6 +25,7 @@ using std::cout;
 using std::endl;
 using std::any_of;
 using std::shared_ptr;
+using std::dynamic_pointer_cast;
 using namespace std::placeholders;
 
 const char* const exit_cmd_c = "quit";
@@ -31,6 +33,8 @@ const char* const error_reading_double_c = "Expected a double!";
 const char* const error_reading_int_c = "Expected an integer!";
 const int min_str_size_c = 2;
 const char* const bad_object_name_error_c = "Invalid name for new object!";
+const char* const map_view_name_c = "map";
+const char* const map_unopened_c = "No map view is open!";
 
 //skips input until the first new_line character
 void skip_Input_Line();
@@ -42,6 +46,10 @@ string read_new_name();
 //Throws an error if unable to read doubles.
 Point get_Point();
 
+//Returns a pointer to a map_view if one exists
+//If one doesn't exist, throws an error indicating such
+shared_ptr<Map_view> get_map();
+
 //no work needed; simply instantiates the controller
 Controller::Controller()
 {
@@ -52,32 +60,26 @@ Controller::Controller()
 //and sent to Model.
 void Controller::run()
 {
-    shared_ptr<View> view{new View};
-    //we're going to use this a lot, so grab it just for clarity
-    Model::get_instance().attach(view);
-    
     //set up maps of commands-to-functions:
     map<string, function<void(void)>> command_fcns;
     map<string, function<void(shared_ptr<Agent>)>> agent_fcns;
     //the following can be called directly:
-    command_fcns.insert(make_pair("default",
-                                  bind(&View::set_defaults, view)));
-    command_fcns.insert(make_pair("show", bind(&View::draw, view)));
-    command_fcns.insert(make_pair("status",
-                                   bind(&Model::describe,
-                                        &Model::get_instance())));
-    command_fcns.insert(make_pair("go",
-                                  bind(&Model::update,
-                                       &Model::get_instance())));
-    //pass a ptr to Model, as we don't want to make any needless
-    //copies
     
+    command_fcns.insert(make_pair("status", bind(&Controller::describe,
+                                                 this)));
+    command_fcns.insert(make_pair("go",bind(&Controller::update,
+                                            this)));
+    command_fcns.insert(make_pair("open", bind(&Controller::open, this)));
+    command_fcns.insert(make_pair("default",
+                                  bind(&Controller::set_default_map, this)));
+    command_fcns.insert(make_pair("show", bind(&Controller::draw, this)));
+    command_fcns.insert(make_pair("close", bind(&Controller::close, this)));
     //these require their own command functions:
     command_fcns.insert(make_pair("size",
-                                  bind(&Controller::resize, this, view)));
+                                  bind(&Controller::resize, this)));
     command_fcns.insert(make_pair("zoom",
-                                  bind(&Controller::zoom, this, view)));
-    command_fcns.insert(make_pair("pan", bind(&Controller::pan, this, view)));
+                                  bind(&Controller::zoom, this)));
+    command_fcns.insert(make_pair("pan", bind(&Controller::pan, this)));
     command_fcns.insert(make_pair("build", bind(&Controller::build, this)));
     command_fcns.insert(make_pair("train", bind(&Controller::train, this)));
     
@@ -97,13 +99,12 @@ void Controller::run()
             cin >> cmd;
             if(cmd == exit_cmd_c) {
                 cout << "Done" << endl;
-                Model::get_instance().detach(view);
                 return;//so let's abort
             }
             else if(Model::get_instance().is_agent_present(cmd)) {
                 //in other words, if the input is an agent
                 shared_ptr<Agent> agent =
-                    Model::get_instance().get_agent_ptr(cmd);
+                Model::get_instance().get_agent_ptr(cmd);
                 if(!agent->is_alive()) {
                     throw Error{"Agent is not alive!"};
                 }
@@ -132,10 +133,46 @@ void Controller::run()
         }
     }
 }
+//Opens a new view according to user input.
+//If the user gave bad information, throws the relevant error.
+void Controller::open()
+{
+    string type_of_view;
+    cin >> type_of_view;
+    if(Model::get_instance().has_view(type_of_view)) {
+        throw Error{"View of that name already open!"};
+    }
+    if(type_of_view == map_view_name_c) {
+        Model::get_instance().attach(shared_ptr<View>{new Map_view});
+    } else if(type_of_view == "health") {
+        Model::get_instance().attach(shared_ptr<View>{new Health_view});
+    } else if(type_of_view == "amounts") {
+        Model::get_instance().attach(shared_ptr<View>{new Amount_view});
+    } else if(Model::get_instance().is_name_in_use(type_of_view)) {
+        Model::get_instance().attach(
+                                     shared_ptr<View>{ new Local_view{type_of_view}});
+    } else {
+        throw Error{"No object of that name!"};
+    }
+}
+//Closes a view according to user input.
+//If the user gave bad information, throws relevant error.
+void Controller::close()
+{
+    string type_of_view;
+    cin >> type_of_view;
+    shared_ptr<View> view = Model::get_instance().get_view(type_of_view);
+    if(view == nullptr) {
+        throw Error{"No view of that name is open!"};
+    }
+    Model::get_instance().detach(view);
+}
+
 //Reads an integer "size" and calls view's set_size with the read in value
 //Throws an error if unable to read an integer
-void Controller::resize(shared_ptr<View> view)
+void Controller::resize()
 {
+    shared_ptr<Map_view> view = get_map();
     int size;
     cin >> size;
     if(!cin) {
@@ -144,10 +181,21 @@ void Controller::resize(shared_ptr<View> view)
     view->set_size(size);
 }
 
+shared_ptr<Map_view> get_map()
+{
+    shared_ptr<Map_view> view =
+    dynamic_pointer_cast<Map_view>(Model::get_instance().get_view(map_view_name_c));
+    if(view == nullptr) {
+        throw Error{map_unopened_c};
+    }
+    return view;
+}
+
 //Reads in a double "zoom" and calls view's set_scale with the read in value
 //Throws an error if unable to read a double.
-void Controller::zoom(shared_ptr<View> view)
+void Controller::zoom()
 {
+    shared_ptr<Map_view> view = get_map();
     double zoom_val;
     cin >> zoom_val;
     if(!cin) {
@@ -157,9 +205,32 @@ void Controller::zoom(shared_ptr<View> view)
 }
 //Reads in two doubles, x and y, and uses them to create a Point to pass view.
 //Throws an error if unable to read doubles.
-void Controller::pan(shared_ptr<View> view)
+void Controller::pan()
 {
-    view->set_origin(get_Point());//can just construct point in-place
+    get_map()->set_origin(get_Point());//can just construct point in-place
+}
+
+//Sets the map's defaults
+void Controller::set_default_map()
+{
+    get_map()->set_defaults();
+}
+
+//Has the Model render all of the views currently available
+void Controller::draw()
+{
+    Model::get_instance().draw();
+}
+
+//Has the Model describe all objects currently in existence.
+void Controller::describe()
+{
+    Model::get_instance().describe();
+}
+//Has the Model update all objects in existence.
+void Controller::update()
+{
+    Model::get_instance().update();
 }
 
 //Reads in the data for a new structure and adds it to the Model
@@ -167,7 +238,7 @@ void Controller::build()
 {
     New_object new_obj = create_object();
     shared_ptr<Structure> new_struct =
-        create_structure(new_obj.name, new_obj.type, get_Point());
+    create_structure(new_obj.name, new_obj.type, get_Point());
     Model::get_instance().add_structure(new_struct);
 }
 //Reads in and adds the data for a new agent to the Model.
@@ -175,7 +246,7 @@ void Controller::train()
 {
     New_object new_obj = create_object();
     shared_ptr<Agent> new_agent =
-        create_agent(new_obj.name, new_obj.type, get_Point());
+    create_agent(new_obj.name, new_obj.type, get_Point());
     Model::get_instance().add_agent(new_agent);
 }
 //Reads in the necessary data for a generic new object,
@@ -231,8 +302,8 @@ void Controller::work(shared_ptr<Agent> agent)
     string source, dest;
     cin >> source >> dest;
     agent->start_working(
-                    Model::get_instance().get_structure_ptr(source),
-                    Model::get_instance().get_structure_ptr(dest));
+                         Model::get_instance().get_structure_ptr(source),
+                         Model::get_instance().get_structure_ptr(dest));
 }
 //Reads in an agent name and orders the agent to begin attacking him.
 //An error is thrown if the target doesn't exist
