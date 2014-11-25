@@ -281,6 +281,7 @@ void Info_view::draw()
         map_iter++) {
         cout << map_iter->first << ": " << map_iter->second << endl;
     }
+    cout << "--------------" << endl;
 }
 //Updates the information for the given object
 void Info_view::insert(const std::string &name, double data)
