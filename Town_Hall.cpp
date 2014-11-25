@@ -18,7 +18,7 @@ Structure(name_, location), food(default_food_c)
 void Town_Hall::deposit(double deposit_amount)
 {
     food += deposit_amount;
-    Model::get_instance().notify_amount(get_name(), food);
+    broadcast_current_state();//let Model know about changes to food
 }
 //deducts 10% of the amount available as a tax,
 //then returns the least amount between the request
@@ -35,7 +35,7 @@ double Town_Hall::withdraw(double amount_to_obtain)
         return avail_amt;
     }
     food -= amount_to_obtain;
-    Model::get_instance().notify_amount(get_name(), food);
+    broadcast_current_state();//let model know about changes to food
     return amount_to_obtain;
 }
 //Outputs information about being a town hall, as well as the food contained.
