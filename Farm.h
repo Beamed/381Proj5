@@ -11,7 +11,6 @@ Food can be withdrawn, but no provision is made for depositing any.
 class Farm : public Structure {
 public:
 	Farm (const std::string& name_, Point location_);
-	~Farm();
 		
 	// returns the specified amount, or the remaining amount, whichever is less,
 	// and deducts that amount from the amount on hand

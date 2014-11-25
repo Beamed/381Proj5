@@ -23,12 +23,6 @@ Sim_object(name_), moving_obj(location_, default_speed_c),
 health(default_health_c), speed(default_speed_c),
 alive(true)
 {
-    cout << "Agent " << name_ << " constructed" << endl;
-}
-//Destructs by simply announcing its death
-Agent::~Agent()
-{
-    cout << "Agent " << get_name() << " destructed" << endl;
 }
 //Returns current location by calling get_current_location
 Point Agent::get_location() const

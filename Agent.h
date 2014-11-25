@@ -19,8 +19,7 @@ class Agent: public Sim_object,
              public std::enable_shared_from_this<Agent> {
 public:
     
-    virtual ~Agent() override;
-    // return true if this agent is Alive or Disappearing
+    // return true if this agent is Alive
     bool is_alive() const {
         return alive;
     }
@@ -62,7 +61,7 @@ public:
     virtual void start_attacking(std::weak_ptr<Agent>);
     
 protected:
-    
+    //protected to ensure no attempted instantiation of abstract class
     Agent(const std::string& name_, Point location_);
     
     // calculate loss of health due to hit.

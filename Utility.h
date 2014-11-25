@@ -17,5 +17,8 @@ private:
 	const std::string msg;
 };
 
+const char* const map_view_name_c = "map";
+const char* const health_view_name_c = "health";
+const char* const amounts_view_name_c = "amounts";
 
 #endif

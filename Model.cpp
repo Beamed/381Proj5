@@ -19,11 +19,18 @@ using std::bind;
 using std::list;
 using std::shared_ptr;
 using std::any_of;
+using std::dynamic_pointer_cast;
 using namespace std::placeholders;
 
 const int default_starting_time_c = 0;
-//Initializes the initial objects, sets time to start at 0
 
+//Takes in a map of objects and returns the object whose distance is closest
+//to the given agent. Undefined behavior if not given a map of sim_objects. 
+template<typename T>
+shared_ptr<Sim_object> get_closest_object(shared_ptr<Agent> agent,
+                                          const T& obj_map);
+
+//Initializes the initial objects, sets time to start at 0
 Model::Model() : time(default_starting_time_c)
 {
     //initialize initial objects:
@@ -36,6 +43,7 @@ Model::Model() : time(default_starting_time_c)
     insert_agent(create_agent("Merry", "Peasant", Point(0., 25.)));
     insert_agent(create_agent("Zug", "Soldier", Point(20., 30.)));
     insert_agent(create_agent("Bug", "Soldier", Point(15., 20.)));
+    insert_agent(create_agent("Iriel", "Archer", Point(20., 38.)));
 }
 
 Model& Model::get_instance()
@@ -198,4 +206,41 @@ shared_ptr<View> Model::get_view(const string& name)
         }
     }
     return nullptr;//else we haven't found one!
+}
+//Returns the agent which is closest to the given agent
+//according to cartesian distance. 
+shared_ptr<Agent> Model::get_closest_agent(shared_ptr<Agent> agent)
+{
+    return dynamic_pointer_cast<Agent>(get_closest_object(agent, agents));
+}
+//Takes in a map of objects and returns the object whose distance is closest
+//to the given agent
+template<typename T>
+shared_ptr<Sim_object> get_closest_object(shared_ptr<Agent> agent,
+                                          const T& obj_map)
+{
+    Point cur_loc = agent->get_location();
+    shared_ptr<Sim_object> candidate = obj_map.begin()->second;
+    double candidate_val =
+        cartesian_distance(cur_loc, obj_map.begin()->second->get_location());
+    for(auto obj_iter = obj_map.begin(); obj_iter != obj_map.end();
+        obj_iter++) {
+        if(dynamic_pointer_cast<Agent>(obj_iter->second) == agent)
+            continue;//don't calculate distance to this very agent. 
+        double new_val = cartesian_distance(cur_loc,
+                                            obj_iter->second->get_location());
+        if(new_val < candidate_val) {
+            candidate_val = new_val;
+            candidate = obj_iter->second;
+        }
+    }
+    return candidate;
+}
+
+//Returns the structure which is closest to the given agent
+//according to cartesian distance.
+shared_ptr<Structure> Model::get_closest_structure(shared_ptr<Agent> agent)
+{
+    return dynamic_pointer_cast<Structure>(get_closest_object(agent,
+                                                              structures));
 }

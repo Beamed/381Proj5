@@ -18,12 +18,6 @@ Peasant::Peasant(const string& name_, Point location_) :
 Agent(name_, location_), working_state(Peasant_state_e::NOT_WORKING),
 food(default_food_c), food_src(nullptr), food_dest(nullptr)
 {
-    cout << "Peasant " << name_ << " constructed" << endl;
-}
-//announces destruction of Peasant
-Peasant::~Peasant()
-{
-    cout << "Peasant " << get_name() << " destructed" << endl;
 }
 //Updates the states of the Peasant;
 //Processing the depositing or withdrawal of food as specified

@@ -9,16 +9,14 @@ using std::endl;
 const double default_amount_c = 0.0;
 
 //Constructs itself by calling Sim_object with the name, and updating
-//its internal location with location. Announces its construction.
+//its internal location with location. 
 Structure::Structure(const string &name_, Point location):
     Sim_object(name_), cur_location(location)
 {
-    cout << "Structure " << name_ << " constructed" << endl;
 }
-//Simply notifies world it's destructed.
+//Empty dtor by necessity; it is a pure virtual class
 Structure::~Structure()
 {
-    cout << "Structure " << get_name() << " destructed" << endl;
 }
 //Simply outputs name and location of structure
 void Structure::describe() const

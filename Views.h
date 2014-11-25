@@ -95,9 +95,7 @@ class Map_view: public Tile_view
     // set the parameters to the default values
     void set_defaults();
     //returns the internal str representation of this view
-    std::string get_name() override {
-        return "map";
-    }
+    std::string get_name() override;
     
 };
 
@@ -162,9 +160,7 @@ public:
     //Updates the health for the given object via. calling insert
     void update_health(const std::string& name, double health) override;
     //Returns the internal representation of the view
-    std::string get_name() override {
-        return "health";
-    }
+    std::string get_name() override;
 };
 
 class Amount_view: public Info_view
@@ -175,9 +171,7 @@ public:
     //Constructs Info_view with the given type of data
     Amount_view();
     //Returns the internal representation of the view's name
-    std::string get_name() override {
-        return "amounts";
-    }
+    std::string get_name() override;
 };
 
 

@@ -226,6 +226,11 @@ void Map_view::draw()
     }
     Tile_view::draw();
 }
+//Returns a string representation of this view
+string Map_view::get_name()
+{
+    return map_view_name_c;
+}
 //Constructs a tile view with the given "set" values of a local view's
 //parameters,
 Local_view::Local_view(const string& name) :
@@ -300,6 +305,11 @@ void Health_view::update_health(const string &name, double health)
 {
     insert(name, health);
 }
+//Returns a string representation of this view
+string Health_view::get_name()
+{
+    return health_view_name_c;
+}
 //Constructs Info_view by notifying base class it contains info on amounts
 Amount_view::Amount_view() : Info_view("Amounts")
 {}
@@ -307,4 +317,9 @@ Amount_view::Amount_view() : Info_view("Amounts")
 void Amount_view::update_amount(const std::string &name, double amount)
 {
     insert(name, amount);
+}
+//Returns a string representation of this view
+string Amount_view::get_name()
+{
+    return amounts_view_name_c;
 }

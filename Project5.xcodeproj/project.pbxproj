@@ -16,7 +16,7 @@
 		C170D3411A1A8B1600710730 /* Moving_object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C170D3291A1A8B1600710730 /* Moving_object.cpp */; };
 		C170D3421A1A8B1600710730 /* Peasant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C170D32B1A1A8B1600710730 /* Peasant.cpp */; };
 		C170D3431A1A8B1600710730 /* Sim_object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C170D32D1A1A8B1600710730 /* Sim_object.cpp */; };
-		C170D3441A1A8B1600710730 /* Soldier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C170D32F1A1A8B1600710730 /* Soldier.cpp */; };
+		C170D3441A1A8B1600710730 /* Warriors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C170D32F1A1A8B1600710730 /* Warriors.cpp */; };
 		C170D3451A1A8B1600710730 /* Structure_factory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C170D3311A1A8B1600710730 /* Structure_factory.cpp */; };
 		C170D3461A1A8B1600710730 /* Structure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C170D3331A1A8B1600710730 /* Structure.cpp */; };
 		C170D3471A1A8B1600710730 /* Town_Hall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C170D3351A1A8B1600710730 /* Town_Hall.cpp */; };
@@ -58,8 +58,8 @@
 		C170D32C1A1A8B1600710730 /* Peasant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peasant.h; sourceTree = SOURCE_ROOT; };
 		C170D32D1A1A8B1600710730 /* Sim_object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sim_object.cpp; sourceTree = SOURCE_ROOT; };
 		C170D32E1A1A8B1600710730 /* Sim_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sim_object.h; sourceTree = SOURCE_ROOT; };
-		C170D32F1A1A8B1600710730 /* Soldier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Soldier.cpp; sourceTree = SOURCE_ROOT; };
-		C170D3301A1A8B1600710730 /* Soldier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Soldier.h; sourceTree = SOURCE_ROOT; };
+		C170D32F1A1A8B1600710730 /* Warriors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Warriors.cpp; sourceTree = SOURCE_ROOT; };
+		C170D3301A1A8B1600710730 /* Warriors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Warriors.h; sourceTree = SOURCE_ROOT; };
 		C170D3311A1A8B1600710730 /* Structure_factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Structure_factory.cpp; sourceTree = SOURCE_ROOT; };
 		C170D3321A1A8B1600710730 /* Structure_factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Structure_factory.h; sourceTree = SOURCE_ROOT; };
 		C170D3331A1A8B1600710730 /* Structure.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Structure.cpp; sourceTree = SOURCE_ROOT; };
@@ -125,8 +125,6 @@
 				C170D34A1A1A8C1800710730 /* p5_main.cpp */,
 				C170D32D1A1A8B1600710730 /* Sim_object.cpp */,
 				C170D32E1A1A8B1600710730 /* Sim_object.h */,
-				C170D32F1A1A8B1600710730 /* Soldier.cpp */,
-				C170D3301A1A8B1600710730 /* Soldier.h */,
 				C170D34B1A1A8C1800710730 /* strings.txt */,
 				C170D3311A1A8B1600710730 /* Structure_factory.cpp */,
 				C170D3321A1A8B1600710730 /* Structure_factory.h */,
@@ -140,6 +138,8 @@
 				C170D3391A1A8B1600710730 /* View.cpp */,
 				C170D34E1A1BC40600710730 /* Views.h */,
 				C170D34D1A1BC40600710730 /* Views.cpp */,
+				C170D32F1A1A8B1600710730 /* Warriors.cpp */,
+				C170D3301A1A8B1600710730 /* Warriors.h */,
 			);
 			path = Project5;
 			sourceTree = "<group>";
@@ -208,7 +208,7 @@
 				C170D3461A1A8B1600710730 /* Structure.cpp in Sources */,
 				C170D34C1A1A8C1800710730 /* p5_main.cpp in Sources */,
 				C170D3411A1A8B1600710730 /* Moving_object.cpp in Sources */,
-				C170D3441A1A8B1600710730 /* Soldier.cpp in Sources */,
+				C170D3441A1A8B1600710730 /* Warriors.cpp in Sources */,
 				C170D33F1A1A8B1600710730 /* Geometry.cpp in Sources */,
 				C170D3471A1A8B1600710730 /* Town_Hall.cpp in Sources */,
 				C170D3491A1A8B1600710730 /* View.cpp in Sources */,
@@ -362,6 +362,7 @@
 				C170D31C1A1A87E100710730 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

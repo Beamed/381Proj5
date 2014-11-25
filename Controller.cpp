@@ -33,7 +33,6 @@ const char* const error_reading_double_c = "Expected a double!";
 const char* const error_reading_int_c = "Expected an integer!";
 const int min_str_size_c = 2;
 const char* const bad_object_name_error_c = "Invalid name for new object!";
-const char* const map_view_name_c = "map";
 const char* const map_unopened_c = "No map view is open!";
 
 //skips input until the first new_line character
@@ -144,9 +143,9 @@ void Controller::open()
     }
     if(type_of_view == map_view_name_c) {
         Model::get_instance().attach(shared_ptr<View>{new Map_view});
-    } else if(type_of_view == "health") {
+    } else if(type_of_view == health_view_name_c) {
         Model::get_instance().attach(shared_ptr<View>{new Health_view});
-    } else if(type_of_view == "amounts") {
+    } else if(type_of_view == amounts_view_name_c) {
         Model::get_instance().attach(shared_ptr<View>{new Amount_view});
     } else if(Model::get_instance().is_name_in_use(type_of_view)) {
         Model::get_instance().attach(

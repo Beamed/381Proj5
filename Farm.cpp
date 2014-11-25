@@ -13,12 +13,6 @@ using std::endl;
 Farm::Farm(const string& name_, Point location_) :
 Structure(name_, location_), cur_amount(default_starting_food_c)
 {
-    cout << "Farm " << name_ << " constructed" << endl;
-}
-//destructs Farm
-Farm::~Farm()
-{
-    cout << "Farm " << get_name() << " destructed" << endl;
 }
 //withdraws either the amount requested, or the closest amount
 //we can

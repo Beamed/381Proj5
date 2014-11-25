@@ -13,12 +13,6 @@ using std::endl;
 Town_Hall::Town_Hall(const string& name_, Point location) :
 Structure(name_, location), food(default_food_c)
 {
-    cout << "Town_Hall " << name_ << " constructed" << endl;
-}
-//destructs Town Hall
-Town_Hall::~Town_Hall()
-{
-    cout << "Town_Hall " << get_name() << " destructed" << endl;
 }
 //deposits the given amount to Town Hall, no other scruples
 void Town_Hall::deposit(double deposit_amount)

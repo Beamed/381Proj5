@@ -94,6 +94,14 @@ public:
     //calls each view's Draw function
     void draw();
     
+    //Returns the agent which is closest to the provided agent
+    //according to the cartesian distance.
+    std::shared_ptr<Agent> get_closest_agent(
+                                            std::shared_ptr<Agent> agent);
+
+    std::shared_ptr<Structure> get_closest_structure(
+                                            std::shared_ptr<Agent> agent);
+    
 private:
     //function object to ensure objects are stored in correct order
     struct Less_than_obj_ptr {
@@ -113,7 +121,6 @@ private:
     
     //inserts an agent into the relevant containers
     void insert_agent(std::shared_ptr<Agent> agent);
-
 
 	// disallow copy/move construction or assignment
 	Model(const Model&) = delete;
