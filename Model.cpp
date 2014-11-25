@@ -220,7 +220,7 @@ shared_ptr<Sim_object> get_closest_object(shared_ptr<Agent> agent,
                                           const T& obj_map)
 {
     Point cur_loc = agent->get_location();
-    shared_ptr<Sim_object> candidate = obj_map.begin()->second;
+    shared_ptr<Sim_object> candidate{nullptr};
     double candidate_val =
         cartesian_distance(cur_loc, obj_map.begin()->second->get_location());
     for(auto obj_iter = obj_map.begin(); obj_iter != obj_map.end();
@@ -229,7 +229,7 @@ shared_ptr<Sim_object> get_closest_object(shared_ptr<Agent> agent,
             continue;//don't calculate distance to this very agent. 
         double new_val = cartesian_distance(cur_loc,
                                             obj_iter->second->get_location());
-        if(new_val < candidate_val) {
+        if(candidate == nullptr || new_val < candidate_val) {
             candidate_val = new_val;
             candidate = obj_iter->second;
         }
