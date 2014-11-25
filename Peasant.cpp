@@ -44,6 +44,8 @@ void Peasant::update()
                 received_amount << endl;
             working_state = Peasant_state_e::OUTBOUND;
             Agent::move_to(food_dest->get_location());
+            broadcast_current_state();
+            //tell Model that food is changed
             return;
         }
         cout << get_name() << ": Waiting " << endl;
@@ -62,7 +64,9 @@ void Peasant::update()
         working_state = Peasant_state_e::INBOUND;
         Agent::move_to(food_src->get_location());
         //call it as Agent::move_to since move_to is overloaded
-        //such that an order to move is different from an order to work
+        //such that an order to move for a Peasant is different from usual work
+        broadcast_current_state();
+        //tell Model food is changed
     }
 }
 //Moves to the specified destination, stopping work along the way

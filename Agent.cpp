@@ -71,6 +71,7 @@ void Agent::lose_health(int attack_strength)
         Model::get_instance().remove_agent(shared_from_this());
         return;
     }
+    Model::get_instance().notify_health(get_name(), health);
     cout << get_name() << ": Ouch!" << endl;
 }
 //Has the agent update its movement if alive

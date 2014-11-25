@@ -25,6 +25,7 @@ double Farm::withdraw(double amount_to_get)
     else {
         cur_amount -= amount_to_get;
     }
+    Model::get_instance().notify_amount(get_name(), cur_amount);
     return amount_to_get;
 }
 
@@ -32,6 +33,7 @@ double Farm::withdraw(double amount_to_get)
 void Farm::update()
 {
     cur_amount += default_production_c;
+    Model::get_instance().notify_amount(get_name(), cur_amount);
     cout << "Farm " << get_name() << " now has " << cur_amount << endl;
 }
 //Simply announces it's a farm, calls the structure describe,
