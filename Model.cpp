@@ -225,7 +225,8 @@ shared_ptr<Sim_object> get_closest_object(shared_ptr<Agent> agent,
     for(auto obj_iter = obj_map.begin(); obj_iter != obj_map.end();
         obj_iter++) {
         if(dynamic_pointer_cast<Agent>(obj_iter->second) == agent)
-            continue;//don't calculate distance to this very agent. 
+            continue;//don't calculate distance to this very agent.
+        //if it isn't an agent, will compare to nullptr, and work as expected
         double new_val = cartesian_distance(cur_loc,
                                             obj_iter->second->get_location());
         if(candidate == nullptr || new_val < candidate_val) {

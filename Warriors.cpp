@@ -133,7 +133,7 @@ void Soldier::take_hit(int attack_strength,
                        weak_ptr<Agent> attacker_ptr)
 {
     Agent::take_hit(attack_strength, attacker_ptr);
-    if(is_attacking() && !is_alive()) {//if we died, do nothing
+    if(!is_alive()) {//if we died, do nothing
         return;
     }
     if(!is_attacking()) {
