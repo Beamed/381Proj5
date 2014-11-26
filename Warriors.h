@@ -16,10 +16,7 @@ public:
 	// Throws an exception if the target is the same as this Agent,
 	// is out of range, or is not alive.
 	void start_attacking(std::weak_ptr<Agent> target_ptr) override;
-    
-    //Returns true if the warrior is currently attacking
-    //False otherwise
-    bool is_attacking() const { return attacking; }
+
     
     // update implements a generic Warrior's behavior
     virtual void update();
@@ -36,6 +33,9 @@ protected:
     //returns true if the target_ptr is in range
     //false otherwise
     bool in_range(std::shared_ptr<Agent> target_ptr) const;
+    //Returns true if the warrior is currently attacking
+    //False otherwise
+    bool is_attacking() const { return attacking; }
     
 private:
     int strength;

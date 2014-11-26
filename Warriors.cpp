@@ -101,6 +101,9 @@ void Warrior::update()
 void Warrior::describe() const
 {
     Agent::describe();
+    if(!is_alive()) {
+        cout << "   Is dead" << endl;//shouldn't appear in this proj
+    }
     if(is_attacking()){
         if(target.expired() || !target.lock()->is_alive())
             cout << "   Attacking dead target" << endl;

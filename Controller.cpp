@@ -99,7 +99,7 @@ void Controller::run()
                 shared_ptr<Agent> agent =
                 Model::get_instance().get_agent_ptr(cmd);
                 if(!agent->is_alive()) {
-                    throw Error{"Agent is not alive!"};
+                    throw Error{"Agent is dead!"};
                 }
                 cin >> cmd;
                 auto fcn = agent_fcns.find(cmd);
