@@ -16,7 +16,7 @@ class Structure;
 
 
 class Agent: public Sim_object,
-             public std::enable_shared_from_this<Agent> {
+public std::enable_shared_from_this<Agent> {
 public:
     
     // return true if this agent is Alive
@@ -37,7 +37,7 @@ public:
     virtual void stop();
     
     // Tell this Agent to accept a hit from an attack of a specified strength
-    // The attacking Agent identifies itself with its this pointer.
+    // The attacking Agent identifies itself with its shared_this ptr
     // A derived class can override this function.
     // The function lose_health is called to handle the effect of the attack.
     virtual void take_hit(int attack_strength,

@@ -10,6 +10,7 @@ Food can be withdrawn, but no provision is made for depositing any.
 
 class Farm : public Structure {
 public:
+    //constructs a Farm from the given name and location
 	Farm (const std::string& name_, Point location_);
 		
 	// returns the specified amount, or the remaining amount, whichever is less,
@@ -21,9 +22,10 @@ public:
 
 	// output information about the current state
 	void describe() const override;
-	
+	//notify Model about food as well as other structure information
     void broadcast_current_state() override;
 private:
+    //current amount of food
     double cur_amount;
 };
 #endif

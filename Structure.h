@@ -17,8 +17,8 @@ public:
     //Returns the current location
     virtual Point get_location() const { return cur_location; }
     
-    //Per the spec, does nothing.
-    void update(){}
+    //Updates the given concrete structure; for abstract, does nothing
+    virtual void update(){}
     
     // output information about the current state
     virtual void describe() const;

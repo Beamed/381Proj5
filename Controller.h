@@ -10,10 +10,9 @@ class View;
 class Agent;
 
 class Controller {
-public:	
-	Controller();
+public:
 
-	// create View object, run the program by acccepting user commands, then destroy View object
+	//run the program by acccepting user commands
 	void run();
 	
 private:

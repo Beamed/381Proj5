@@ -16,24 +16,25 @@ const int default_health_c = 5;
 const double default_speed_c = 5.;
 const int default_precision_c = 2;
 
-//Constructs the Agent by calling agent and moving_object,
-//and then setting the default values for its private variables
+//Constructs the Agent by calling agent's ctor,
+//and then setting the default and given values for its private variables
 Agent::Agent(const std::string& name_, Point location_):
 Sim_object(name_), moving_obj(location_, default_speed_c),
 health(default_health_c), speed(default_speed_c),
 alive(true)
 {
 }
-//Returns current location by calling get_current_location
+//Returns current location by calling moving_obj's get_current_location
 Point Agent::get_location() const
 {
     return moving_obj.get_current_location();
 }
-//Returns is_currently_moving; if dead, has already been set to not move
+//Returns moving_obj's is_currently_moving;
+//if dead, has already been set to not move
 bool Agent::is_moving() const
 {
     return moving_obj.is_currently_moving();
-}//if is currently dead, is no longer moving.
+}
 //Orders the agent to begin moving to the given destination
 void Agent::move_to(Point destination_)
 {
@@ -71,7 +72,7 @@ void Agent::lose_health(int attack_strength)
         Model::get_instance().remove_agent(shared_from_this());
         return;
     }
-    broadcast_current_state();
+    broadcast_current_state();//if alive, notify model we took damage
     cout << get_name() << ": Ouch!" << endl;
 }
 //Has the agent update its movement if alive
@@ -81,7 +82,7 @@ void Agent::update()
         update_Movement();
     }
 }
-//Calls update location; if there, announces such.
+//Calls moving_obj's update location; if there, announces such.
 //If not, announces it's taken another step.
 //Either way, notifies model.
 void Agent::update_Movement()

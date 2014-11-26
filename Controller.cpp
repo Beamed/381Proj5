@@ -49,11 +49,6 @@ Point get_Point();
 //If one doesn't exist, throws an error indicating such
 shared_ptr<Map_view> get_map();
 
-//no work needed; simply instantiates the controller
-Controller::Controller()
-{
-    //empty: no work needed
-}
 //Runs an infinite loop processing user commands.
 //When the user eventually quits, deletes the view it instantiated
 //and sent to Model.
@@ -73,7 +68,6 @@ void Controller::run()
                                   bind(&Controller::set_default_map, this)));
     command_fcns.insert(make_pair("show", bind(&Controller::draw, this)));
     command_fcns.insert(make_pair("close", bind(&Controller::close, this)));
-    //these require their own command functions:
     command_fcns.insert(make_pair("size",
                                   bind(&Controller::resize, this)));
     command_fcns.insert(make_pair("zoom",
@@ -112,7 +106,7 @@ void Controller::run()
                 if(fcn == agent_fcns.end()) {
                     throw Error{"Unrecognized command!"};
                 }
-                fcn->second(agent);//otherwise call function
+                fcn->second(agent);//if all is well, call agent's fcn
             }
             else {
                 auto fcn_cmd = command_fcns.find(cmd);
@@ -179,7 +173,7 @@ void Controller::resize()
     }
     view->set_size(size);
 }
-
+//Returns the map if one exists. If one doesn't exist, throws an error. 
 shared_ptr<Map_view> get_map()
 {
     shared_ptr<Map_view> view =

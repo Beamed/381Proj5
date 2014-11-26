@@ -45,7 +45,7 @@ Model::Model() : time(default_starting_time_c)
     insert_agent(create_agent("Bug", "Soldier", Point(15., 20.)));
     insert_agent(create_agent("Iriel", "Archer", Point(20., 38.)));
 }
-
+//Returns the singleton instance
 Model& Model::get_instance()
 {
     static Model singleton_model;
@@ -79,7 +79,7 @@ void Model::insert_agent(shared_ptr<Agent> agent)
     agents.insert(make_pair(agent->get_name(), agent));
 }
 
-//Returns the structure pointer with the requested name.
+//Returns the structure shared_ptr with the requested name.
 //If not found, will throw Error("Structure not found!")
 shared_ptr<Structure> Model::get_structure_ptr(const string& name) const
 {
@@ -221,8 +221,7 @@ shared_ptr<Sim_object> get_closest_object(shared_ptr<Agent> agent,
 {
     Point cur_loc = agent->get_location();
     shared_ptr<Sim_object> candidate{nullptr};
-    double candidate_val =
-        cartesian_distance(cur_loc, obj_map.begin()->second->get_location());
+    double candidate_val{};
     for(auto obj_iter = obj_map.begin(); obj_iter != obj_map.end();
         obj_iter++) {
         if(dynamic_pointer_cast<Agent>(obj_iter->second) == agent)

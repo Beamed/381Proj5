@@ -12,8 +12,8 @@ struct Point;//forward declare
 
 class Town_Hall : public Structure{
 
-
 public:
+    //Constructs a Town Hall with the given name and location
 	Town_Hall (const std::string& name_, Point location_);
 	
 	// deposit adds in the supplied amount
