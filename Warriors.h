@@ -1,9 +1,3 @@
-/*
-A Soldier is an Agent that has attack and defense behaviors. It can be commanded
-to start attacking another Agent and will continue the attack as long as 
-it is alive and the target is alive and in range. If attacked, the Soldier will
-start attacking its attacker.
-*/
 #ifndef WARRIORS_H
 #define WARRIORS_H
 
@@ -31,6 +25,9 @@ public:
     virtual void update();
     //Outputs information about the current state of the Warrior to stdout
     virtual void describe() const;
+    
+    // Overrides Agent's stop to print a message
+    void stop() override;
     
 protected:
     //Sets the target to be the target, moves to state is_attacking
@@ -60,9 +57,6 @@ public:
 	// Overrides Agent's take_hit to counterattack when attacked.
 	void take_hit(int attack_strength,
                   std::weak_ptr<Agent> attacker_ptr) override;
-	
-	// Overrides Agent's stop to print a message
-	void stop() override;
 
 	// output information about the current state
 	void describe() const override;

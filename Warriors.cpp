@@ -110,7 +110,11 @@ void Warrior::describe() const
     else
         cout << "   Not attacking" << endl;
 }
-
+//Outputs a message that a True Warrior doesn't stop.
+void Warrior::stop()
+{
+    cout << get_name() << ": Don't bother me" << endl;
+}
 
 //Constructs a soldier by calling the Warrior base ctor,
 //mainly by providing the default values
@@ -134,11 +138,7 @@ void Soldier::take_hit(int attack_strength,
     }
 }
 
-//Outputs a message that a soldier doesn't stop.
-void Soldier::stop()
-{
-    cout << get_name() << ": Don't bother me" << endl;
-}
+
 
 //Outputs that the Agent is a soldier before proceeding with Warrior describe
 void Soldier::describe() const
