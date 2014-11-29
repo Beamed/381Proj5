@@ -75,6 +75,8 @@ private:
     Moving_object moving_obj;
     
     bool alive;
+    //Updates the movement of the agent by calling moving_obj's
+    //update_location. Announces step or if it's there, depending.
     void update_Movement();
 };
 #endif
