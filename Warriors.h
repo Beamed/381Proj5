@@ -3,8 +3,6 @@
 
 #include "Agent.h"
 
-using std::shared_ptr;
-
 class Warrior: public Agent {
 public:
     //Constructor for Warrior takes in Agent info and warrior-specific

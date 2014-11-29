@@ -18,15 +18,15 @@ Notice how only the Standard Library headers need to be included - reduced coupl
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <map>
-#include <set>
-#include <list>
+#include <map>//for map of objects-to-names
+#include <set>//for overall set of objs
+#include <list>//for list of views
 #include <memory>
 
-class Model;//forward declare for ptrs:
+//forward declarations:
 class Agent;
 class Structure;
-class Sim_object;//forward declare so we don't include into header
+class Sim_object;
 class View;
 struct Point;
  

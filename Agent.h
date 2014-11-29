@@ -9,7 +9,7 @@
 #define AGENT_H
 #include <memory>
 #include "Sim_object.h"
-#include "Moving_object.h"
+#include "Moving_object.h"//needed for internal moving obj
 
 
 class Structure;

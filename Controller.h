@@ -6,7 +6,7 @@ with the user.
 #define CONTROLLER_H
 #include <string>
 #include <memory>
-class View;
+class View;//incomplete declarations
 class Agent;
 
 class Controller {

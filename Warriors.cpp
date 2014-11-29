@@ -28,8 +28,7 @@ attack_msg(_msg)
 {
 }
 
-//Empty destructor
-
+//Empty destructor (enforces Warrior abstractedness)
 Warrior::~Warrior()
 {
 }
